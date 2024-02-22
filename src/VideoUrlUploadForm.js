@@ -8,6 +8,7 @@ import { fetchVideoInfo } from "./apiHooks";
 import { Task } from "./Task";
 import { ErrorBoundary } from "./ErrorBoundary";
 import apiConfig from "./apiConfig";
+import { fileURLToPath } from "url";
 
 /** Receive user's video file, submit it to API, and show task status
  *
@@ -21,8 +22,12 @@ export function VideoUrlUploadForm({
   index,
   refetchVideos,
   resetPrompts,
+  selectedFile,
+  setSelectedFile,
+  isFileUploading,
+  setIsFileUploading,
 }) {
-  const [videoUrl, setVideoUrl] = useState(null);
+  // const [videoUrl, setVideoUrl] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
@@ -34,39 +39,64 @@ export function VideoUrlUploadForm({
   const queryClient = useQueryClient();
 
   /** Update user input (video Url) in real-time */
-  function handleChange(evt) {
-    const input = evt.target;
-    setVideoUrl(input.value);
-    setError(null);
-  }
+  // function handleChange(evt) {
+  //   const input = evt.target;
+  //   setVideoUrl(input.value);
+  //   setError(null);
+  // }
 
   /** Get information of a video  */
-  async function getVideoInfo(url) {
-    const response = await fetchVideoInfo(queryClient, url);
-    return response;
-  }
+  // async function getVideoInfo(url) {
+  //   const response = await fetchVideoInfo(queryClient, url);
+  //   return response;
+  // }
 
   /** Submit a Youtube video url for indexing  */
   async function indexYouTubeVideo() {
-    if (taskVideo) {
-      try {
-        const data = {
-          index_id: index,
-          url: taskVideo.video_url,
-        };
-        const response = await axios.post(
-          apiConfig.INDEX_VIDEO_URL.toString(),
-          {
-            headers: {
-              "content-type": "application/json",
-            },
-            body: data,
-          }
-        );
-        const taskId = response.data._id;
-        setTaskId(taskId);
-      } catch (error) {
-        setError(error.message);
+    try {
+      const form = new FormData();
+      form.append("language", "en");
+      form.append("index_id", index);
+      form.append("video_file", selectedFile);
+      const response = await axios.post(
+        apiConfig.INDEX_VIDEO_URL.toString(),
+        form,
+        {
+          headers: {
+            accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const taskId = response.data._id;
+      setTaskId(taskId);
+    } catch (error) {
+      setError(error.message);
+    }
+  }
+
+  /** Verify file type */
+  function handleFileSelect(event) {
+    let userSelectedFile = event.target.files[0];
+
+    if (userSelectedFile) {
+      const allowedVideoTypes = [
+        "video/mp4",
+        "video/mpeg",
+        "video/avi",
+        "video/3gpp",
+        "video/x-msvideo",
+        "video/x-matroska",
+        "video/ogg",
+        "video/webm",
+      ];
+
+      if (allowedVideoTypes.includes(userSelectedFile.type)) {
+        setSelectedFile(userSelectedFile);
+        setInputRef(selectedFile.name);
+      } else {
+        alert("Please select a valid video file (e.g., MP4, MPEG, QuickTime).");
+        setInputRef("");
       }
     }
   }
@@ -74,43 +104,48 @@ export function VideoUrlUploadForm({
   /** Get information of a video and set it as task */
   async function handleSubmit(evt) {
     evt.preventDefault();
-    try {
-      if (!videoUrl?.trim()) {
-        throw new Error("Please enter a valid video URL");
+    if (selectedFile) {
+      setIsFileUploading(true);
+      try {
+        indexYouTubeVideo();
+      } catch (error) {
+        console.error("Video upload error:", error);
       }
-      const videoInfo = await getVideoInfo(videoUrl);
-      setTaskVideo(videoInfo);
-      inputRef.current.value = "";
-      resetPrompts();
-    } catch (error) {
-      setError(error.message);
     }
   }
 
-  useEffect(() => {
-    if (taskVideo) {
-      indexYouTubeVideo();
-    }
-  }, [taskVideo]);
+  // useEffect(() => {
+  //   if (taskVideo) {
+  //     indexYouTubeVideo();
+  //   }
+  // }, [taskVideo]);
 
   return (
     <div className="videoUrlUploadForm">
       <div className="videoUrlUploadForm__title">Upload video</div>
       <form
         className="videoUrlUploadForm__form"
-        onChange={handleChange}
+        // onChange={handleChange}
+        enctype="multipart/form-data"
         onSubmit={handleSubmit}
       >
+        
         <input
           className="videoUrlUploadForm__form__input"
+          id="fileUpload"
           data-cy="data-cy-url-input"
           ref={setInputRef}
+          onChange={handleFileSelect}
           placeholder="https://www.youtube.com/"
+          type="file"
+          accept="video/*"
+          name="video_file"
+          // style={{ display: "none" }}
         ></input>
         <button
           className="videoUrlUploadForm__form__button"
           data-cy="data-cy-upload-button"
-          disabled={taskVideo || inputRef.current?.value.length < 1}
+          disabled={taskVideo || inputRef.current?.value?.length < 1}
         >
           Upload
         </button>

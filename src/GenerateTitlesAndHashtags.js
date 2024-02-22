@@ -4,7 +4,7 @@ import { Video } from "./Video";
 import { InputForm } from "./InputForm";
 import { VideoUrlUploadForm } from "./VideoUrlUploadForm";
 import { Result } from "./Result";
-import "./SummarizeVideo.css";
+import "./GenerateTitlesAndHashtags.css";
 import { useGetVideo } from "./apiHooks";
 import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
@@ -14,11 +14,11 @@ import greenWarningIcon from "./Warning_Green.svg";
 
 /** Summarize a Video App
  *
- * App -> SummarizeVideo -> {VideoUrlUploadForm, Video, InputForm, Result}
+ * App -> GenerateTitlesAndHashtags -> {VideoUrlUploadForm, Video, InputForm, Result}
  *
  */
 
-export function SummarizeVideo({ index, videoId, refetchVideos }) {
+export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
   const { data: video, isLoading } = useGetVideo(
     index,
     videoId,
@@ -33,6 +33,8 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
   const [showVideoTitle, setShowVideoTitle] = useState(false);
   const [showCheckWarning, setShowCheckWarning] = useState(false);
   const [taskVideo, setTaskVideo] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(false);
+  const [isFileUploading, setIsFileUploading] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -59,7 +61,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
       isChecked: false,
     });
   }
-
   useEffect(() => {
     const fetchData = async () => {
       await queryClient.invalidateQueries({
@@ -70,24 +71,30 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
   }, [index, videoId, queryClient]);
 
   return (
-    <div className="summarizeVideo">
-      <h1 className="summarizeVideo__appTitle">Summarize a Youtube Video</h1>
+    <div className="GenerateTitlesAndHashtags">
+      <h1 className="GenerateTitlesAndHashtags__appTitle">
+        Summarize a Youtube Video
+      </h1>
       <VideoUrlUploadForm
         setTaskVideo={setTaskVideo}
         taskVideo={taskVideo}
         index={index}
         refetchVideos={refetchVideos}
         resetPrompts={resetPrompts}
+        selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
+        isFileUploading={isFileUploading}
+        setIsFileUploading={setIsFileUploading}
       />
       {!video && (
-        <div className="summarizeVideo__uploadMessageWrapper">
+        <div className="GenerateTitlesAndHashtags__uploadMessageWrapper">
           <img
-            className="summarizeVideo__uploadMessageWrapper__warningIcon"
+            className="GenerateTitlesAndHashtags__uploadMessageWrapper__warningIcon"
             src={greenWarningIcon}
             alt="greenWarningIcon"
           ></img>
           <div>
-            <p className="summarizeVideo__uploadMessageWrapper__message">
+            <p className="GenerateTitlesAndHashtags__uploadMessageWrapper__message">
               Please upload a video
             </p>
           </div>
@@ -98,24 +105,22 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
           <ErrorBoundary>
             {isLoading && <LoadingSpinner />}
             {video && (
-              <Video
-                url={video.source?.url}
-                width={"381px"}
-                height={"214px"}
-              />
+              <Video url={video.hls?.video_url} width={"381px"} height={"214px"} />
             )}
           </ErrorBoundary>
           {showVideoTitle && (
-            <div className="summarizeVideo__videoTitle">{vidTitleClean}</div>
+            <div className="GenerateTitlesAndHashtags__videoTitle">
+              {vidTitleClean}
+            </div>
           )}
           {showCheckWarning && (
-            <div className="summarizeVideo__warningMessageWrapper">
+            <div className="GenerateTitlesAndHashtags__warningMessageWrapper">
               <img
-                className="summarizeVideo__warningMessageWrapper__warningIcon"
+                className="GenerateTitlesAndHashtags__warningMessageWrapper__warningIcon"
                 src={WarningIcon}
                 alt="WarningIcon"
               ></img>
-              <div className="summarizeVideo__warningMessageWrapper__warningMessage">
+              <div className="GenerateTitlesAndHashtags__warningMessageWrapper__warningMessage">
                 Please select one of the checkboxes
               </div>
             </div>

@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
+const multer = require("multer");
 const app = express();
+const upload = multer();
 const cors = require("cors");
 const ytdl = require("ytdl-core");
 const bodyParser = require("body-parser");
@@ -15,6 +17,7 @@ const PORT_NUMBER = process.env.REACT_APP_PORT_NUMBER;
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+// app.use(upload.none());
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -132,24 +135,45 @@ app.get("/video-info", async (request, response, next) => {
 });
 
 /** Index a Youtube video for analysis, returning a task ID */
-app.post("/index", async (request, response, next) => {
-  const options = {
-    method: "POST",
-    url: `${API_BASE_URL}/tasks/external-provider`,
-    headers: { ...HEADERS, accept: "application/json" },
-    data: request.body.body,
-  };
+app.post(
+  "/index",
+  upload.single("video_file"),
+  async (request, response, next) => {
+    const formData = new FormData();
 
-  try {
-    const apiResponse = await axios.request(options);
-    response.json(apiResponse.data);
-  } catch (error) {
-    const status = error.response?.status || 500;
-    const message =
-      error.response?.data?.message || "Error indexing a YouTube Video";
-    return next({ status, message });
+    // Append data from request.body
+    Object.entries(request.body).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    const blob = new Blob([request.file.buffer], {
+      type: request.file.mimetype,
+    });
+
+    formData.append("video_file", blob, request.file.originalname);
+
+    const options = {
+      method: "POST",
+      url: `${API_BASE_URL}/tasks`,
+      headers: {
+        "x-api-key": TWELVE_LABS_API_KEY,
+        accept: "application/json",
+        "Content-Type":
+          "multipart/form-data; boundary=---011000010111000001101001",
+      },
+      data: formData,
+    };
+    try {
+      const apiResponse = await axios.request(options);
+      response.json(apiResponse.data);
+    } catch (error) {
+      const status = error.response?.status || 500;
+      const message =
+        error.response?.data?.message || "Error indexing a YouTube Video";
+      return next({ status, message });
+    }
   }
-});
+);
 
 /** Check the status of a specific indexing task */
 app.get("/tasks/:taskId", async (request, response, next) => {
