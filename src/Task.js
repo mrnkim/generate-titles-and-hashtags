@@ -16,7 +16,6 @@ import { Video } from "./Video";
 export function Task({
   taskId,
   refetchVideos,
-  setTaskVideo,
   setIsFileUploading,
 }) {
   const { data: task } = useGetTask(taskId);
@@ -25,7 +24,6 @@ export function Task({
 
   useEffect(() => {
     if (task && (task.status === "ready" || task.status === "failed")) {
-      // setTaskVideo(null);
       setIsFileUploading(false);
       refetchVideos();
     }

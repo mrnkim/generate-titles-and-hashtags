@@ -6,6 +6,7 @@
 
 
 .task__dummyImage {
+    margin-top: 10px;
     width: 381px  !important;
     height: 214px  !important;
     overflow: hidden;
@@ -18,9 +19,9 @@
 .task__dummyImage__imageAnimation {
     width: auto;
     height: auto;
-    max-width: 80%;
-    max-height: 80%;
-    animation: uploadProgress 2.5s linear infinite;
+    max-width: 50%;
+    max-height: 50%;
+    animation: uploadProgress 2s linear infinite;
   }
 
   @keyframes uploadProgress {

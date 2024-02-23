@@ -17,8 +17,6 @@ import { fileURLToPath } from "url";
  */
 
 export function VideoUrlUploadForm({
-  setTaskVideo,
-  taskVideo,
   index,
   refetchVideos,
   resetPrompts,
@@ -37,19 +35,6 @@ export function VideoUrlUploadForm({
   };
 
   const queryClient = useQueryClient();
-
-  /** Update user input (video Url) in real-time */
-  // function handleChange(evt) {
-  //   const input = evt.target;
-  //   setVideoUrl(input.value);
-  //   setError(null);
-  // }
-
-  /** Get information of a video  */
-  // async function getVideoInfo(url) {
-  //   const response = await fetchVideoInfo(queryClient, url);
-  //   return response;
-  // }
 
   /** Submit a Youtube video url for indexing  */
   async function indexYouTubeVideo() {
@@ -114,19 +99,12 @@ export function VideoUrlUploadForm({
     }
   }
 
-  // useEffect(() => {
-  //   if (taskVideo) {
-  //     indexYouTubeVideo();
-  //   }
-  // }, [taskVideo]);
-
   return (
     <div className="videoUrlUploadForm">
       <div className="videoUrlUploadForm__title">Upload video</div>
       {!isFileUploading && (
         <form
           className="videoUrlUploadForm__form"
-          // onChange={handleChange}
           encType="multipart/form-data"
           onSubmit={handleSubmit}
         >
@@ -145,7 +123,7 @@ export function VideoUrlUploadForm({
           <button
             className="videoUrlUploadForm__form__button"
             data-cy="data-cy-upload-button"
-            disabled={taskVideo || inputRef.current?.value?.length < 1}
+            disabled={isFileUploading || inputRef.current?.value?.length < 1}
           >
             Upload
           </button>
@@ -154,8 +132,8 @@ export function VideoUrlUploadForm({
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
           {isFileUploading && (
-            <div className="videoUrlUploadForm__taskVideoWrapper">
-              <div className="videoUrlUploadForm__taskVideoWrapper__message">
+            <div className="videoUrlUploadForm__taskWrapper">
+              <div className="videoUrlUploadForm__taskWrapper__message">
                 {!taskId && "Submitting..."}
               </div>
               {taskId && (
@@ -163,7 +141,6 @@ export function VideoUrlUploadForm({
                   taskId={taskId}
                   refetchVideos={refetchVideos}
                   index={index}
-                  setTaskVideo={setTaskVideo}
                   setIsFileUploading={setIsFileUploading}
                 />
               )}

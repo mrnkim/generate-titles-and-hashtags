@@ -32,15 +32,14 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
   const [showCheckWarning, setShowCheckWarning] = useState(false);
-  const [taskVideo, setTaskVideo] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  console.log("🚀 > GenerateTitlesAndHashtags > selectedFile=", selectedFile);
+  console.log("🚀 > GenerateTitlesAndHashtags > selectedFile=", selectedFile)
   const [isFileUploading, setIsFileUploading] = useState(false);
+  console.log("🚀 > GenerateTitlesAndHashtags > isFileUploading=", isFileUploading)
 
   const queryClient = useQueryClient();
 
   const vidTitleRaw = video?.metadata?.video_title;
-  console.log("🚀 > GenerateTitlesAndHashtags > vidTitleRaw=", vidTitleRaw);
   const vidTitleClean = decodeAndCleanFilename(vidTitleRaw);
 
   /** Return clean video file name  */
@@ -83,8 +82,6 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
         Summarize a Youtube Video
       </h1>
       <VideoUrlUploadForm
-        setTaskVideo={setTaskVideo}
-        taskVideo={taskVideo}
         index={index}
         refetchVideos={refetchVideos}
         resetPrompts={resetPrompts}
