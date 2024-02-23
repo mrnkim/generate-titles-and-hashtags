@@ -98,17 +98,19 @@ app.get(
 );
 
 /** Summarize a video */
-app.post("/videos/:videoId/summarize", async (request, response, next) => {
+app.post("/videos/:videoId/gist", async (request, response, next) => {
   const videoId = request.params.videoId;
   let data = request.body.data;
+  console.log("🚀 > app.post > data=", data)
 
   try {
     const options = {
       method: "POST",
-      url: `${API_BASE_URL}/summarize`,
+      url: `${API_BASE_URL}/gist`,
       headers: { ...HEADERS, accept: "application/json" },
       data: { ...data, video_id: videoId },
     };
+    console.log("🚀 > app.post > options=", options)
     const apiResponse = await axios.request(options);
     response.json(apiResponse.data);
   } catch (error) {

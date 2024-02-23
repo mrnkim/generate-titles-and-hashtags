@@ -68,18 +68,17 @@ export async function fetchVideoInfo(queryClient, url) {
   }
 }
 
-export function useGenerateSummary(data, videoId, enabled) {
+export function useGenerateTtitleTopicHashtag(types, videoId, enabled) {
   return useQuery({
-    queryKey: [keys.VIDEOS, "summarize", videoId],
+    queryKey: [keys.VIDEOS, "topic", videoId],
     queryFn: async () => {
       if (!enabled) {
         return null;
       }
 
-      const response = await apiConfig.SERVER.post(
-        `/videos/${videoId}/summarize`,
-        { data }
-      );
+      const response = await apiConfig.SERVER.post(`/videos/${videoId}/gist`, {
+        data: { types: Array.from(types) },
+      });
       const respData = response.data;
       return respData;
     },
@@ -87,43 +86,41 @@ export function useGenerateSummary(data, videoId, enabled) {
   });
 }
 
-export function useGenerateChapters(data, videoId, enabled) {
-  return useQuery({
-    queryKey: [keys.VIDEOS, "chapters", videoId],
-    queryFn: async () => {
-      if (!enabled) {
-        return null;
-      }
+// export function useGenerateTitle(data, videoId, enabled) {
+//   return useQuery({
+//     queryKey: [keys.VIDEOS, "title", videoId],
+//     queryFn: async () => {
+//       if (!enabled) {
+//         return null;
+//       }
 
-      const response = await apiConfig.SERVER.post(
-        `/videos/${videoId}/summarize`,
-        { data }
-      );
-      const respData = response.data;
-      return respData;
-    },
-    enabled: enabled,
-  });
-}
+//       const response = await apiConfig.SERVER.post(`/videos/${videoId}/gist`, {
+//         data,
+//       });
+//       const respData = response.data;
+//       return respData;
+//     },
+//     enabled: enabled,
+//   });
+// }
 
-export function useGenerateHighlights(data, videoId, enabled) {
-  return useQuery({
-    queryKey: [keys.VIDEOS, "highlights", videoId],
-    queryFn: async () => {
-      if (!enabled) {
-        return null;
-      }
+// export function useGenerateHashtag(data, videoId, enabled) {
+//   return useQuery({
+//     queryKey: [keys.VIDEOS, "hashtag", videoId],
+//     queryFn: async () => {
+//       if (!enabled) {
+//         return null;
+//       }
 
-      const response = await apiConfig.SERVER.post(
-        `/videos/${videoId}/summarize`,
-        { data }
-      );
-      const respData = response.data;
-      return respData;
-    },
-    enabled: enabled,
-  });
-}
+//       const response = await apiConfig.SERVER.post(`/videos/${videoId}/gist`, {
+//         data,
+//       });
+//       const respData = response.data;
+//       return respData;
+//     },
+//     enabled: enabled,
+//   });
+// }
 
 export function useGetTask(taskId) {
   return useQuery({

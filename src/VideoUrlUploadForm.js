@@ -101,7 +101,8 @@ export function VideoUrlUploadForm({
 
   return (
     <div className="videoUrlUploadForm">
-      <div className="videoUrlUploadForm__title">Upload video</div>
+      {!isFileUploading && <div className="videoUrlUploadForm__title">Upload video</div>}
+      {isFileUploading && <div className="videoUrlUploadForm__title">Uploading "{selectedFile.name}"</div>}
       {!isFileUploading && (
         <form
           className="videoUrlUploadForm__form"

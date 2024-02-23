@@ -10,48 +10,50 @@ import "./InputForm.css";
  */
 export function InputForm({
   video,
-  setField1Prompt,
-  setField2Prompt,
-  setField3Prompt,
+  // setField1Prompt,
+  // setField2Prompt,
+  // setField3Prompt,
   field1,
   field2,
   field3,
   setIsSubmitted,
   setShowVideoTitle,
   setShowCheckWarning,
+  types,
 }) {
+  console.log("🚀 > types=", types);
   const queryClient = useQueryClient();
 
-  const summaryRef = useRef(null);
-  const chaptersRef = useRef(null);
-  const highlightsRef = useRef(null);
+  const topicRef = useRef(null);
+  const titleRef = useRef(null);
+  const hashtagRef = useRef(null);
 
   /** Combine user input and make API call(s)  */
   async function handleClick(event) {
     event.preventDefault();
 
-    if (summaryRef.current?.checked) {
-      setField1Prompt({ type: field1 });
+    if (topicRef.current?.checked) {
+      types.add(field1);
     } else {
-      setField1Prompt(null);
+      types.delete(field1);
     }
 
-    if (chaptersRef.current?.checked) {
-      setField2Prompt({ type: field2 });
+    if (titleRef.current?.checked) {
+      types.add(field2);
     } else {
-      setField2Prompt(null);
+      types.delete(field2);
     }
 
-    if (highlightsRef.current?.checked) {
-      setField3Prompt({ type: field3 });
+    if (hashtagRef.current?.checked) {
+      types.add(field3);
     } else {
-      setField3Prompt(null);
+      types.delete(field3);
     }
 
     if (
-      !summaryRef.current?.checked &&
-      !chaptersRef.current?.checked &&
-      !highlightsRef.current?.checked
+      !topicRef.current?.checked &&
+      !titleRef.current?.checked &&
+      !hashtagRef.current?.checked
     ) {
       setShowVideoTitle(false);
       setShowCheckWarning(true);
@@ -65,31 +67,31 @@ export function InputForm({
     queryClient.invalidateQueries([
       keys.VIDEOS,
       video._id,
-      "summarize",
-      "chapters",
-      "highlights",
+      "topic",
+      "title",
+      "hashtag",
     ]);
   }
 
   useEffect(() => {
-    summaryRef.current.checked = true;
-    chaptersRef.current.checked = true;
-    highlightsRef.current.checked = true;
+    topicRef.current.checked = true;
+    titleRef.current.checked = true;
+    hashtagRef.current.checked = true;
   }, []);
 
   return (
     <div className="inputForm">
-      <div className="inputForm__title">Choose a summary format</div>
+      <div className="inputForm__title">Choose a topic format</div>
       <form className="inputForm__form">
         <div className="inputForm__form__checkboxes">
           <div className="inputForm__form__checkboxes__wrapper">
             <input
               className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
-              data-cy="data-cy-checkbox-summary"
+              data-cy="data-cy-checkbox-topic"
               id={field1}
               name={field1}
-              ref={summaryRef}
+              ref={topicRef}
             />
             <label
               className="inputForm__form__checkboxes__wrapper__label"
@@ -102,8 +104,8 @@ export function InputForm({
             <input
               className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
-              ref={chaptersRef}
-              data-cy="data-cy-checkbox-chapters"
+              ref={titleRef}
+              data-cy="data-cy-checkbox-title"
               id={field2}
               name={field2}
             />
@@ -118,8 +120,8 @@ export function InputForm({
             <input
               className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
-              ref={highlightsRef}
-              data-cy="data-cy-checkbox-highlights"
+              ref={hashtagRef}
+              data-cy="data-cy-checkbox-hashtag"
               id={field3}
               name={field3}
             />

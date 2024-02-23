@@ -25,17 +25,21 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
     Boolean(videoId)
   );
 
-  const [field1, field2, field3] = ["summary", "chapter", "highlight"];
-  const [field1Prompt, setField1Prompt] = useState({ type: null });
-  const [field2Prompt, setField2Prompt] = useState({ type: null });
-  const [field3Prompt, setField3Prompt] = useState({ type: null });
+  const [field1, field2, field3] = ["topic", "title", "hashtag"];
+  const [types, setTypes] = useState(new Set());
+  // const [field1Prompt, setField1Prompt] = useState({ types: null });
+  // const [field2Prompt, setField2Prompt] = useState({ type: null });
+  // const [field3Prompt, setField3Prompt] = useState({ type: null });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
   const [showCheckWarning, setShowCheckWarning] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  console.log("🚀 > GenerateTitlesAndHashtags > selectedFile=", selectedFile)
+  console.log("🚀 > GenerateTitlesAndHashtags > selectedFile=", selectedFile);
   const [isFileUploading, setIsFileUploading] = useState(false);
-  console.log("🚀 > GenerateTitlesAndHashtags > isFileUploading=", isFileUploading)
+  console.log(
+    "🚀 > GenerateTitlesAndHashtags > isFileUploading=",
+    isFileUploading
+  );
 
   const queryClient = useQueryClient();
 
@@ -57,15 +61,16 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
   }
 
   async function resetPrompts() {
-    setField1Prompt({
-      isChecked: false,
-    });
-    setField2Prompt({
-      isChecked: false,
-    });
-    setField3Prompt({
-      isChecked: false,
-    });
+    setTypes(new Set());
+    // setField1Prompt({
+    //   isChecked: false,
+    // });
+    // setField2Prompt({
+    //   isChecked: false,
+    // });
+    // setField3Prompt({
+    //   isChecked: false,
+    // });
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -136,27 +141,29 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
           {video && (
             <InputForm
               video={video}
-              field1Prompt={field1Prompt}
-              setField1Prompt={setField1Prompt}
-              field2Prompt={field2Prompt}
-              setField2Prompt={setField2Prompt}
-              field3Prompt={field3Prompt}
-              setField3Prompt={setField3Prompt}
+              // field1Prompt={field1Prompt}
+              // setField1Prompt={setField1Prompt}
+              // field2Prompt={field2Prompt}
+              // setField2Prompt={setField2Prompt}
+              // field3Prompt={field3Prompt}
+              // setField3Prompt={setField3Prompt}
               field1={field1}
               field2={field2}
               field3={field3}
               setIsSubmitted={setIsSubmitted}
               setShowVideoTitle={setShowVideoTitle}
               setShowCheckWarning={setShowCheckWarning}
+              types={types}
             />
           )}
           {video && (
             <Result
               video={video}
               isSubmitted={isSubmitted}
-              field1Prompt={field1Prompt}
-              field2Prompt={field2Prompt}
-              field3Prompt={field3Prompt}
+              types={types}
+              // field1Prompt={field1Prompt}
+              // field2Prompt={field2Prompt}
+              // field3Prompt={field3Prompt}
             />
           )}
         </>

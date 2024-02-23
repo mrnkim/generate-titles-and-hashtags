@@ -3,11 +3,7 @@ import { Video } from "./Video";
 import { useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "./LoadingSpinner";
 import "./Result.css";
-import {
-  useGenerateSummary,
-  useGenerateChapters,
-  useGenerateHighlights,
-} from "./apiHooks";
+import { useGenerateTtitleTopicHashtag } from "./apiHooks";
 import keys from "./keys";
 import { ErrorBoundary } from "./ErrorBoundary";
 
@@ -20,36 +16,40 @@ import { ErrorBoundary } from "./ErrorBoundary";
 export function Result({
   video,
   isSubmitted,
-  field1Prompt,
-  field2Prompt,
-  field3Prompt,
+  // field1Prompt,
+  // field2Prompt,
+  // field3Prompt,
+  types,
 }) {
-  const { data: field1Result } = useGenerateSummary(
-    field1Prompt,
+  console.log("🚀 > types=", types);
+  console.log("🚀 > video=", video);
+  const { data: result } = useGenerateTtitleTopicHashtag(
+    types,
     video?._id,
-    Boolean(video?._id && field1Prompt?.type && isSubmitted)
+    Boolean(video?._id && types?.size > 0 && isSubmitted)
   );
-  const { data: field2Result } = useGenerateChapters(
-    field2Prompt,
-    video?._id,
-    Boolean(video?._id && field2Prompt?.type && isSubmitted)
-  );
-  const { data: field3Result } = useGenerateHighlights(
-    field3Prompt,
-    video?._id,
-    Boolean(video?._id && field3Prompt?.type && isSubmitted)
-  );
+  // const { data: field2Result } = useGenerateTitle(
+  console.log("🚀 > result=", result);
+  //   field2Prompt,
+  //   video?._id,
+  //   Boolean(video?._id && field2Prompt?.type && isSubmitted)
+  // );
+  // const { data: field3Result } = useGenerateHashtag(
+  //   field3Prompt,
+  //   video?._id,
+  //   Boolean(video?._id && field3Prompt?.type && isSubmitted)
+  // );
   const queryClient = useQueryClient();
 
   useEffect(() => {
     queryClient.invalidateQueries([
       keys.VIDEOS,
       video?._id,
-      "summarize",
-      "chapters",
-      "highlights",
+      "topic",
+      "title",
+      "hashtag",
     ]);
-  }, [field1Prompt?.type, field2Prompt?.type, field3Prompt?.type]);
+  }, [types]);
 
   /** Format seconds to hours:minutes:seconds */
   function formatTime(timeInSeconds) {
@@ -65,56 +65,30 @@ export function Result({
   return (
     <ErrorBoundary>
       <div className="result">
-        {field1Prompt?.type && isSubmitted && (
-          <div className="result__summary">
-            <h2 className="result__summary__title">Sentences</h2>
-            {field1Result ? (
-              <div className="result__summary__summary">
-                {field1Result.summary}
-              </div>
+        {result && isSubmitted && (
+          <div className="result__title">
+            <h2 className="result__title__title">Title</h2>
+            {result.title ? (
+              <div className="result__title__titleData">{result.title}</div>
             ) : (
               <LoadingSpinner />
             )}
           </div>
         )}
-        {field2Prompt?.type && isSubmitted && (
-          <div className="result__chapters">
-            <h2 className="result__chapters__title">Chapters</h2>
-            <div className="result__chapters__wrapper">
+        {/* {field2Prompt?.type && isSubmitted && (
+          <div className="result__topics">
+            <h2 className="result__topics__title">Topics</h2>
+            <div className="result__topics__wrapper">
               {field2Result &&
-                Array.isArray(field2Result.chapters) &&
-                field2Result.chapters.map((chapter) => (
-                  <div
-                    className="result__chapters__wrapper__chapter"
-                    key={chapter.chapter_title}
-                  >
-                    <Video
-                      url={video.source.url}
-                      start={chapter.start}
-                      end={chapter.end}
-                      width={"221px"}
-                      height={"120px"}
-                    />
-                    <div className="result__chapters__wrapper__chapter__wrapper">
-                      <div className="result__chapters__wrapper__chapter__wrapper_titleTime">
-                        <div className="result__chapters__wrapper__chapter__wrapper_titleTime_title">
-                          {" "}
-                          {chapter.chapter_title}
-                        </div>
-                        <div className="result__chapters__wrapper__chapter__wrapper_titleTime_time">
-                          {formatTime(chapter.start)} -{" "}
-                          {formatTime(chapter.end)}
-                        </div>
-                      </div>
-                      <div className="result__chapters__wrapper__chapter__wrapper__summary">
-                        {chapter.chapter_summary}
-                      </div>
-                    </div>
+                Array.isArray(field2Result.topics) &&
+                field2Result.topics.map((topic) => (
+                  <div className="result__topics__wrapper__topic" key={topic}>
+                    {topic}
                   </div>
                 ))}
-              {field2Result && !field2Result.chapters && (
-                <p className="result__chapters__wrapper__message">
-                  No chapters available
+              {field2Result && !field2Result.topics && (
+                <p className="result__topics__wrapper__message">
+                  No Topics available
                 </p>
               )}
               {!field2Result && <LoadingSpinner />}
@@ -122,43 +96,28 @@ export function Result({
           </div>
         )}
         {field3Prompt?.type && isSubmitted && (
-          <div className="result__highlights">
-            <h2 className="result__highlights__title">Highlights</h2>
-            <div className="result__highlights__wrapper">
+          <div className="result__hashtags">
+            <h2 className="result__hashtags__title">Hashtags</h2>
+            <div className="result__hashtags__wrapper">
               {field3Result &&
-                Array.isArray(field3Result.highlights) &&
-                field3Result.highlights.map((highlight) => (
+                Array.isArray(field3Result.hashtags) &&
+                field3Result.hashtags.map((hashtag) => (
                   <div
-                    className="result__highlights__wrapper__highlight"
-                    key={highlight.highlight}
+                    className="result__hashtags__wrapper__hashtag"
+                    key={hashtag.hashtag}
                   >
-                    <Video
-                      url={video.source.url}
-                      start={highlight.start}
-                      end={highlight.end}
-                      width={"221px"}
-                      height={"120px"}
-                    />
-                    <div className="result__highlights__wrapper__highlight__timeSummary">
-                      <div className="result__highlights__wrapper__highlight__timeSummary__time">
-                        {formatTime(highlight.start)} -{" "}
-                        {formatTime(highlight.end)}
-                      </div>
-                      <div className="result__highlights__wrapper__highlight__timeSummary__summary">
-                        {highlight.highlight_summary || highlight.highlight}
-                      </div>
-                    </div>
+                    #{hashtag}
                   </div>
                 ))}
-              {field3Result && !field3Result.highlights && (
-                <p className="result__highlights__wrapper__message">
-                  No highlights available
+              {field3Result && !field3Result.hashtags && (
+                <p className="result__hashtags__wrapper__message">
+                  No Hashtags available
                 </p>
               )}
               {!field3Result && <LoadingSpinner />}
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </ErrorBoundary>
   );
