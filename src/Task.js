@@ -4,24 +4,32 @@ import { ErrorBoundary } from "react-error-boundary";
 import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
 import { useGetTask } from "./apiHooks";
-import "./Task.css"
+import "./Task.css";
+import dummyImage from "./upload.png";
+import { Video } from "./Video";
 
 /** Gets and shows status of a task
  *
  * VideoUrlUploadForm -> Task
  *
  */
-export function Task({ taskId, refetchVideos, setTaskVideo }) {
-  const { data } = useGetTask(taskId);
+export function Task({
+  taskId,
+  refetchVideos,
+  setTaskVideo,
+  setIsFileUploading,
+}) {
+  const { data: task } = useGetTask(taskId);
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (data && (data.status === "ready" || data.status === "failed")) {
-      setTaskVideo(null);
+    if (task && (task.status === "ready" || task.status === "failed")) {
+      // setTaskVideo(null);
+      setIsFileUploading(false);
       refetchVideos();
     }
-  }, [data, data.status]);
+  }, [task, task.status]);
 
   useEffect(() => {
     queryClient.invalidateQueries({
@@ -31,13 +39,22 @@ export function Task({ taskId, refetchVideos, setTaskVideo }) {
 
   return (
     <div className="task">
-      <LoadingSpinner />
+     {task.hls?.video_url && <LoadingSpinner />}
+      <div className="task__status">
+        {task && task.status ? `${task.status}...` : null}
+      </div>
       <ErrorBoundary>
-        <Suspense fallback={<LoadingSpinner />}>
-          <div className="task__status">
-            {data && data.status ? `${data.status}...` : null}
+        {!task.hls?.thumbnail_urls && (
+          <div className="task__dummyImage">
+            <img src={dummyImage} alt="Thumbnail" className="task__dummyImage__imageAnimation"/>
           </div>
-        </Suspense>
+        )}
+        {task.hls?.video_url && (
+          <div className="task__video">
+            <Video url={task.hls.video_url} width={"381px"} height={"214px"} />
+          </div>
+        )}
+        <Suspense fallback={<LoadingSpinner />}></Suspense>
       </ErrorBoundary>
     </div>
   );

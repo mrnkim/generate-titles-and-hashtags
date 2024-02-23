@@ -33,17 +33,24 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
   const [showVideoTitle, setShowVideoTitle] = useState(false);
   const [showCheckWarning, setShowCheckWarning] = useState(false);
   const [taskVideo, setTaskVideo] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  console.log("🚀 > GenerateTitlesAndHashtags > selectedFile=", selectedFile);
   const [isFileUploading, setIsFileUploading] = useState(false);
 
   const queryClient = useQueryClient();
 
   const vidTitleRaw = video?.metadata?.video_title;
+  console.log("🚀 > GenerateTitlesAndHashtags > vidTitleRaw=", vidTitleRaw);
   const vidTitleClean = decodeAndCleanFilename(vidTitleRaw);
 
   /** Return clean video file name  */
   function decodeAndCleanFilename(filename) {
-    const decodedFilename = decodeURIComponent(filename);
+    let decodedFilename = filename;
+    try {
+      decodedFilename = decodeURIComponent(filename);
+    } catch (error) {
+      console.error("Error decoding filename:", error);
+    }
     const cleanedFilename = decodedFilename
       .replace(/%20/g, " ")
       .replace(/\([^)]*\)/g, "");
@@ -100,12 +107,16 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
           </div>
         </div>
       )}
-      {!taskVideo && (
+      {!isFileUploading && (
         <>
           <ErrorBoundary>
             {isLoading && <LoadingSpinner />}
             {video && (
-              <Video url={video.hls?.video_url} width={"381px"} height={"214px"} />
+              <Video
+                url={video.hls?.video_url}
+                width={"381px"}
+                height={"214px"}
+              />
             )}
           </ErrorBoundary>
           {showVideoTitle && (

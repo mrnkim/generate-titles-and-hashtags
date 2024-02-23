@@ -93,7 +93,7 @@ export function VideoUrlUploadForm({
 
       if (allowedVideoTypes.includes(userSelectedFile.type)) {
         setSelectedFile(userSelectedFile);
-        setInputRef(selectedFile.name);
+        setInputRef(selectedFile?.name);
       } else {
         alert("Please select a valid video file (e.g., MP4, MPEG, QuickTime).");
         setInputRef("");
@@ -123,42 +123,38 @@ export function VideoUrlUploadForm({
   return (
     <div className="videoUrlUploadForm">
       <div className="videoUrlUploadForm__title">Upload video</div>
-      <form
-        className="videoUrlUploadForm__form"
-        // onChange={handleChange}
-        enctype="multipart/form-data"
-        onSubmit={handleSubmit}
-      >
-        
-        <input
-          className="videoUrlUploadForm__form__input"
-          id="fileUpload"
-          data-cy="data-cy-url-input"
-          ref={setInputRef}
-          onChange={handleFileSelect}
-          placeholder="https://www.youtube.com/"
-          type="file"
-          accept="video/*"
-          name="video_file"
-          // style={{ display: "none" }}
-        ></input>
-        <button
-          className="videoUrlUploadForm__form__button"
-          data-cy="data-cy-upload-button"
-          disabled={taskVideo || inputRef.current?.value?.length < 1}
+      {!isFileUploading && (
+        <form
+          className="videoUrlUploadForm__form"
+          // onChange={handleChange}
+          encType="multipart/form-data"
+          onSubmit={handleSubmit}
         >
-          Upload
-        </button>
-      </form>
+          <input
+            className="videoUrlUploadForm__form__input"
+            id="fileUpload"
+            data-cy="data-cy-url-input"
+            ref={setInputRef}
+            onChange={handleFileSelect}
+            placeholder="https://www.youtube.com/"
+            type="file"
+            accept="video/*"
+            name="video_file"
+            // style={{ display: "none" }}
+          ></input>
+          <button
+            className="videoUrlUploadForm__form__button"
+            data-cy="data-cy-upload-button"
+            disabled={taskVideo || inputRef.current?.value?.length < 1}
+          >
+            Upload
+          </button>
+        </form>
+      )}
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
-          {taskVideo && (
+          {isFileUploading && (
             <div className="videoUrlUploadForm__taskVideoWrapper">
-              <Video
-                url={taskVideo.video_url}
-                width={"381px"}
-                height={"214px"}
-              />
               <div className="videoUrlUploadForm__taskVideoWrapper__message">
                 {!taskId && "Submitting..."}
               </div>
@@ -168,6 +164,7 @@ export function VideoUrlUploadForm({
                   refetchVideos={refetchVideos}
                   index={index}
                   setTaskVideo={setTaskVideo}
+                  setIsFileUploading={setIsFileUploading}
                 />
               )}
             </div>
