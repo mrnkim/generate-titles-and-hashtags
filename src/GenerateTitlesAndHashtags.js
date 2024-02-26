@@ -79,12 +79,18 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
       });
     };
     fetchData();
+    setTypes(new Set());
+    setIsSubmitted(false);
+    setShowVideoTitle(false);
+    setShowCheckWarning(false);
+    setSelectedFile(null);
+    setIsFileUploading(false);
   }, [index, videoId, queryClient]);
 
   return (
     <div className="GenerateTitlesAndHashtags">
       <h1 className="GenerateTitlesAndHashtags__appTitle">
-       Generate Titles and Hashtags for Your Video
+        Generate Titles and Hashtags for Your Video
       </h1>
       <VideoFileUploadForm
         index={index}

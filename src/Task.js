@@ -13,14 +13,19 @@ import { Video } from "./Video";
  * VideoUrlUploadForm -> Task
  *
  */
-export function Task({ taskId, refetchVideos, setIsFileUploading }) {
+export function Task({
+  taskId,
+  refetchVideos,
+  setIsFileUploading,
+}) {
   const { data: task } = useGetTask(taskId);
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
     if (task && (task.status === "ready" || task.status === "failed")) {
-      setIsFileUploading(false);
+      // setIsFileUploading(false);
+      // setShowCheckWarning(false);
       refetchVideos();
     }
   }, [task, task.status]);

@@ -70,7 +70,7 @@ export async function fetchVideoInfo(queryClient, url) {
 
 export function useGenerateTtitleTopicHashtag(types, videoId, enabled) {
   return useQuery({
-    queryKey: [keys.VIDEOS, "topic", videoId],
+    queryKey: [keys.VIDEOS, "gist", videoId],
     queryFn: async () => {
       if (!enabled) {
         return null;

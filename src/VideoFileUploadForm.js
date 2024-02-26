@@ -25,7 +25,6 @@ export function VideoFileUploadForm({
   isFileUploading,
   setIsFileUploading,
 }) {
-  // const [videoUrl, setVideoUrl] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);

@@ -21,6 +21,7 @@ export function Result({
   // field3Prompt,
   types,
 }) {
+  console.log("🚀 > isSubmitted,=", isSubmitted);
   console.log("🚀 > types=", types);
   console.log("🚀 > video=", video);
   const { data: result } = useGenerateTtitleTopicHashtag(
@@ -55,7 +56,7 @@ export function Result({
     <ErrorBoundary>
       {result && isSubmitted && (
         <div className="result">
-          {result.topics.length > 0 && (
+          {result.topics?.length > 0 && (
             <div className="result__topics">
               <h2 className="result__topics__title">Topic</h2>
               <div className="result__topics__topics">
@@ -67,17 +68,17 @@ export function Result({
               </div>
             </div>
           )}
-          {(result.topics.length < 1 ||
-            (result.topics.length > 0 && result.topics[0].length < 1)) && (
+          {(result.topics?.length < 1 ||
+            (result.topics?.length > 0 && result.topics[0].length < 1)) && (
             <p>No topics available</p>
           )}
-          {result.title.length >= 0 && (
+          {result.title?.length >= 0 && (
             <div className="result__title">
               <h2 className="result__title__title">Title</h2>
               <div className="result__title__titleData">{result.title}</div>
             </div>
           )}
-          {result.title.length < 1 && <p>No title available</p>}
+          {result.title?.length < 1 && <p>No title available</p>}
           {result.hashtags && (
             <div className="result__hashtags">
               <h2 className="result__hashtags__title">Hashtags</h2>
@@ -90,10 +91,10 @@ export function Result({
               </div>
             </div>
           )}
-          {(result.hashtags.length < 1 ||
-            (result.hashtags.length > 0 && result.hashtags[0].length < 1)) && (
-            <p>No hashtags available</p>
-          )}
+          {result.hashtags &&
+            (result.hashtags.length < 1 ||
+              (result.hashtags.length > 0 &&
+                result.hashtags[0].length < 1)) && <p>No hashtags available</p>}
         </div>
       )}
     </ErrorBoundary>
