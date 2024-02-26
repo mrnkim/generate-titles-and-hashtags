@@ -1,4 +1,4 @@
-import "./VideoUrlUploadForm.css";
+import "./VideoFileUploadForm.css";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { Video } from "./Video";
 import LoadingSpinner from "./LoadingSpinner";
@@ -16,7 +16,7 @@ import { fileURLToPath } from "url";
  *
  */
 
-export function VideoUrlUploadForm({
+export function VideoFileUploadForm({
   index,
   refetchVideos,
   resetPrompts,
@@ -100,17 +100,23 @@ export function VideoUrlUploadForm({
   }
 
   return (
-    <div className="videoUrlUploadForm">
-      {!isFileUploading && <div className="videoUrlUploadForm__title">Upload video</div>}
-      {isFileUploading && <div className="videoUrlUploadForm__title">Uploading "{selectedFile.name}"</div>}
+    <div className="videoFileUploadForm">
+      {!isFileUploading && (
+        <div className="videoFileUploadForm__title">Upload video</div>
+      )}
+      {isFileUploading && (
+        <div className="videoFileUploadForm__title">
+          Uploading "{selectedFile.name}"
+        </div>
+      )}
       {!isFileUploading && (
         <form
-          className="videoUrlUploadForm__form"
+          className="videoFileUploadForm__form"
           encType="multipart/form-data"
           onSubmit={handleSubmit}
         >
           <input
-            className="videoUrlUploadForm__form__input"
+            className="videoFileUploadForm__form__input"
             id="fileUpload"
             data-cy="data-cy-url-input"
             ref={setInputRef}
@@ -122,7 +128,7 @@ export function VideoUrlUploadForm({
             // style={{ display: "none" }}
           ></input>
           <button
-            className="videoUrlUploadForm__form__button"
+            className="videoFileUploadForm__form__button"
             data-cy="data-cy-upload-button"
             disabled={isFileUploading || inputRef.current?.value?.length < 1}
           >
@@ -133,8 +139,8 @@ export function VideoUrlUploadForm({
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
           {isFileUploading && (
-            <div className="videoUrlUploadForm__taskWrapper">
-              <div className="videoUrlUploadForm__taskWrapper__message">
+            <div className="videoFileUploadForm__taskWrapper">
+              <div className="videoFileUploadForm__taskWrapper__message">
                 {!taskId && "Submitting..."}
               </div>
               {taskId && (
@@ -149,7 +155,7 @@ export function VideoUrlUploadForm({
           )}
         </Suspense>
       </ErrorBoundary>
-      {error && <div className="videoUrlUploadForm_errorMessage">{error}</div>}
+      {error && <div className="videoFileUploadForm_errorMessage">{error}</div>}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Video } from "./Video";
 import { InputForm } from "./InputForm";
-import { VideoUrlUploadForm } from "./VideoUrlUploadForm";
+import { VideoFileUploadForm } from "./VideoFileUploadForm";
 import { Result } from "./Result";
 import "./GenerateTitlesAndHashtags.css";
 import { useGetVideo } from "./apiHooks";
@@ -84,9 +84,9 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
   return (
     <div className="GenerateTitlesAndHashtags">
       <h1 className="GenerateTitlesAndHashtags__appTitle">
-        Summarize a Youtube Video
+       Generate Titles and Hashtags for Your Video
       </h1>
-      <VideoUrlUploadForm
+      <VideoFileUploadForm
         index={index}
         refetchVideos={refetchVideos}
         resetPrompts={resetPrompts}

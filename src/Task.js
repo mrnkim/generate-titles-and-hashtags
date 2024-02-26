@@ -13,11 +13,7 @@ import { Video } from "./Video";
  * VideoUrlUploadForm -> Task
  *
  */
-export function Task({
-  taskId,
-  refetchVideos,
-  setIsFileUploading,
-}) {
+export function Task({ taskId, refetchVideos, setIsFileUploading }) {
   const { data: task } = useGetTask(taskId);
 
   const queryClient = useQueryClient();
@@ -37,16 +33,17 @@ export function Task({
 
   return (
     <div className="task">
-     {task.hls?.video_url && <LoadingSpinner />}
+      {task.hls?.video_url && <LoadingSpinner />}
+      {!task.hls?.thumbnail_urls && (
+        <LoadingSpinner />
+        // <div className="task__dummyImage">
+        //   <img src={dummyImage} alt="Thumbnail" className="task__dummyImage__imageAnimation"/>
+        // </div>
+      )}
       <div className="task__status">
         {task && task.status ? `${task.status}...` : null}
       </div>
       <ErrorBoundary>
-        {!task.hls?.thumbnail_urls && (
-          <div className="task__dummyImage">
-            <img src={dummyImage} alt="Thumbnail" className="task__dummyImage__imageAnimation"/>
-          </div>
-        )}
         {task.hls?.video_url && (
           <div className="task__video">
             <Video url={task.hls.video_url} width={"381px"} height={"214px"} />

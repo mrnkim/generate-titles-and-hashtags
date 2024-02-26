@@ -1,4 +1,4 @@
-.videoUrlUploadForm {
+.videoFileUploadForm {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,13 +6,14 @@
     gap: 15px;
 }
 
-.videoUrlUploadForm__title {
+.videoFileUploadForm__title {
     font-weight: 700;
     font-size: 16px;
     margin-bottom: 8px;
+    width: 450px;
 }
 
-.videoUrlUploadForm__form__input {
+.videoFileUploadForm__form__input {
     width: 272px;
     height: 24px;
     padding: 4px 8px 4px 8px;
@@ -20,7 +21,7 @@
     gap: 4px;
 }
 
-.videoUrlUploadForm__form__button {
+.videoFileUploadForm__form__button {
     margin-left: 8px;
     width: 83px;
     height: 36px;
@@ -32,16 +33,16 @@
     gap: 4px;
 }
 
-.videoUrlUploadForm__form__button:hover:enabled {
+.videoFileUploadForm__form__button:hover:enabled {
     cursor: pointer;
     transform: scale(0.98);
 }
 
-.videoUrlUploadForm__form__button:disabled {
+.videoFileUploadForm__form__button:disabled {
     cursor: not-allowed;
 }
 
-.videoUrlUploadForm_errorMessage {
+.videoFileUploadForm_errorMessage {
     color: var(--TL-Red-500, #F44336);
     font-size: 14px;
     font-style: normal;
@@ -49,7 +50,8 @@
     line-height: 1.25rem;
 }
 
-.videoUrlUploadForm__taskWrapper__message {
+.videoFileUploadForm__taskWrapper__message {
     font-size: 14px;
     margin-top: 15px;
 }
+
