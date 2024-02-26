@@ -51,74 +51,42 @@ export function Result({
     ]);
   }, [types]);
 
-  /** Format seconds to hours:minutes:seconds */
-  function formatTime(timeInSeconds) {
-    const hours = Math.floor(timeInSeconds / 3600);
-    const minutes = Math.floor((timeInSeconds % 3600) / 60);
-    const seconds = Math.floor(timeInSeconds % 60);
-    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-    return formattedTime;
-  }
-
   return (
     <ErrorBoundary>
-      <div className="result">
-        {result && isSubmitted && (
-          <div className="result__title">
-            <h2 className="result__title__title">Title</h2>
-            {result.title ? (
-              <div className="result__title__titleData">{result.title}</div>
-            ) : (
-              <LoadingSpinner />
-            )}
-          </div>
-        )}
-        {/* {field2Prompt?.type && isSubmitted && (
-          <div className="result__topics">
-            <h2 className="result__topics__title">Topics</h2>
-            <div className="result__topics__wrapper">
-              {field2Result &&
-                Array.isArray(field2Result.topics) &&
-                field2Result.topics.map((topic) => (
-                  <div className="result__topics__wrapper__topic" key={topic}>
+      {result && isSubmitted && (
+        <div className="result">
+          {result.topics && (
+            <div className="result__topics">
+              <h2 className="result__topics__title">Topic</h2>
+              <div className="result__topics__topics">
+                {result.topics.map((topic) => (
+                  <div className="result__topics__topic" key={topic}>
                     {topic}
                   </div>
                 ))}
-              {field2Result && !field2Result.topics && (
-                <p className="result__topics__wrapper__message">
-                  No Topics available
-                </p>
-              )}
-              {!field2Result && <LoadingSpinner />}
+              </div>
             </div>
-          </div>
-        )}
-        {field3Prompt?.type && isSubmitted && (
-          <div className="result__hashtags">
-            <h2 className="result__hashtags__title">Hashtags</h2>
-            <div className="result__hashtags__wrapper">
-              {field3Result &&
-                Array.isArray(field3Result.hashtags) &&
-                field3Result.hashtags.map((hashtag) => (
-                  <div
-                    className="result__hashtags__wrapper__hashtag"
-                    key={hashtag.hashtag}
-                  >
+          )}
+          {result.title && (
+            <div className="result__title">
+              <h2 className="result__title__title">Title</h2>
+              <div className="result__title__titleData">{result.title}</div>
+            </div>
+          )}
+          {result.hashtags && (
+            <div className="result__hashtags">
+              <h2 className="result__hashtags__title">Hashtags</h2>
+              <div className="result__hashtags__hashtags">
+                {result.hashtags.map((hashtag) => (
+                  <div className="result__hashtags__hashtag" key={hashtag}>
                     #{hashtag}
                   </div>
                 ))}
-              {field3Result && !field3Result.hashtags && (
-                <p className="result__hashtags__wrapper__message">
-                  No Hashtags available
-                </p>
-              )}
-              {!field3Result && <LoadingSpinner />}
+              </div>
             </div>
-          </div>
-        )} */}
-      </div>
+          )}
+        </div>
+      )}
     </ErrorBoundary>
   );
 }

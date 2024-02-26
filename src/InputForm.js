@@ -113,7 +113,7 @@ export function InputForm({
               className="inputForm__form__checkboxes__wrapper__label"
               htmlFor={field2}
             >
-              {field2}s
+              {field2}
             </label>
           </div>
           <div className="inputForm__form__checkboxes__wrapper">
