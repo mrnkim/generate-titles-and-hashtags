@@ -7,7 +7,7 @@ import { ErrorBoundary } from "./ErrorBoundary";
 
 /** Shows the results
  *
- * SummarizeVideo -> {Result} -> Video
+ * GenerateTitlesAndHashtags -> Result
  *
  */
 
