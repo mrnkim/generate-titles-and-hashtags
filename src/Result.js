@@ -1,9 +1,7 @@
 import { React, useEffect } from "react";
-import { Video } from "./Video";
 import { useQueryClient } from "@tanstack/react-query";
-import LoadingSpinner from "./LoadingSpinner";
 import "./Result.css";
-import { useGenerateTtitleTopicHashtag } from "./apiHooks";
+import { useGenerateTitleTopicHashtag } from "./apiHooks";
 import keys from "./keys";
 import { ErrorBoundary } from "./ErrorBoundary";
 
@@ -13,33 +11,13 @@ import { ErrorBoundary } from "./ErrorBoundary";
  *
  */
 
-export function Result({
-  video,
-  isSubmitted,
-  // field1Prompt,
-  // field2Prompt,
-  // field3Prompt,
-  types,
-}) {
-  console.log("🚀 > isSubmitted,=", isSubmitted);
-  console.log("🚀 > types=", types);
-  console.log("🚀 > video=", video);
-  const { data: result } = useGenerateTtitleTopicHashtag(
+export function Result({ video, isSubmitted, types }) {
+  const { data: result } = useGenerateTitleTopicHashtag(
     types,
     video?._id,
     Boolean(video?._id && types?.size > 0 && isSubmitted)
   );
-  // const { data: field2Result } = useGenerateTitle(
-  console.log("🚀 > result=", result);
-  //   field2Prompt,
-  //   video?._id,
-  //   Boolean(video?._id && field2Prompt?.type && isSubmitted)
-  // );
-  // const { data: field3Result } = useGenerateHashtag(
-  //   field3Prompt,
-  //   video?._id,
-  //   Boolean(video?._id && field3Prompt?.type && isSubmitted)
-  // );
+
   const queryClient = useQueryClient();
 
   useEffect(() => {

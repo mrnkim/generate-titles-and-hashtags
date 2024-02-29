@@ -1,25 +1,22 @@
 import "./VideoFileUploadForm.css";
-import { useState, useEffect, useRef, Suspense } from "react";
-import { Video } from "./Video";
+import { useState, useRef, Suspense } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchVideoInfo } from "./apiHooks";
 import { Task } from "./Task";
 import { ErrorBoundary } from "./ErrorBoundary";
 import apiConfig from "./apiConfig";
-import { fileURLToPath } from "url";
+import keys from "./keys";
 
 /** Receive user's video file, submit it to API, and show task status
  *
- * SummarizeVideo -> {VideoFileUploadForm} -> {Video, Task}
+ * GenerateTitlesAndHashtags -> {VideoFileUploadForm} -> Task
  *
  */
 
 export function VideoFileUploadForm({
   index,
   refetchVideos,
-  resetPrompts,
   selectedFile,
   setSelectedFile,
   isFileUploading,
@@ -29,11 +26,11 @@ export function VideoFileUploadForm({
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
 
+  const queryClient = useQueryClient();
+
   const setInputRef = (ref) => {
     inputRef.current = ref;
   };
-
-  const queryClient = useQueryClient();
 
   /** Submit a Youtube video url for indexing  */
   async function indexYouTubeVideo() {
@@ -90,6 +87,9 @@ export function VideoFileUploadForm({
     evt.preventDefault();
     if (selectedFile) {
       setIsFileUploading(true);
+      queryClient.invalidateQueries({
+        queryKey: [keys.TASK, taskId],
+      });
       try {
         indexYouTubeVideo();
       } catch (error) {
@@ -124,7 +124,6 @@ export function VideoFileUploadForm({
             type="file"
             accept="video/*"
             name="video_file"
-            // style={{ display: "none" }}
           ></input>
           <button
             className="videoFileUploadForm__form__button"
@@ -146,8 +145,6 @@ export function VideoFileUploadForm({
                 <Task
                   taskId={taskId}
                   refetchVideos={refetchVideos}
-                  index={index}
-                  setIsFileUploading={setIsFileUploading}
                 />
               )}
             </div>

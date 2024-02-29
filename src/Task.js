@@ -5,27 +5,20 @@ import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
 import { useGetTask } from "./apiHooks";
 import "./Task.css";
-import dummyImage from "./upload.png";
 import { Video } from "./Video";
 
 /** Gets and shows status of a task
  *
- * VideoUrlUploadForm -> Task
+ * VideoUrlUploadForm -> Task -> Video
  *
  */
-export function Task({
-  taskId,
-  refetchVideos,
-  setIsFileUploading,
-}) {
+export function Task({ taskId, refetchVideos }) {
   const { data: task } = useGetTask(taskId);
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
     if (task && (task.status === "ready" || task.status === "failed")) {
-      // setIsFileUploading(false);
-      // setShowCheckWarning(false);
       refetchVideos();
     }
   }, [task, task.status]);
@@ -39,12 +32,7 @@ export function Task({
   return (
     <div className="task">
       {task.hls?.video_url && <LoadingSpinner />}
-      {!task.hls?.thumbnail_urls && (
-        <LoadingSpinner />
-        // <div className="task__dummyImage">
-        //   <img src={dummyImage} alt="Thumbnail" className="task__dummyImage__imageAnimation"/>
-        // </div>
-      )}
+      {!task.hls?.thumbnail_urls && <LoadingSpinner />}
       <div className="task__status">
         {task && task.status ? `${task.status}...` : null}
       </div>

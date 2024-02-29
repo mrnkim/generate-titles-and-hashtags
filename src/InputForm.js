@@ -5,14 +5,11 @@ import "./InputForm.css";
 
 /** Receive user's check prompt for the API call
  *
- * SummarizeVideo -> {InputForm}
+ * GenerateTitlesAndHashtags -> {InputForm}
  *
  */
 export function InputForm({
   video,
-  // setField1Prompt,
-  // setField2Prompt,
-  // setField3Prompt,
   field1,
   field2,
   field3,
@@ -21,7 +18,6 @@ export function InputForm({
   setShowCheckWarning,
   types,
 }) {
-  console.log("🚀 > types=", types);
   const queryClient = useQueryClient();
 
   const topicRef = useRef(null);

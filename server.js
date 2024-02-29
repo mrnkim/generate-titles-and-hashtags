@@ -97,12 +97,10 @@ app.get(
   }
 );
 
-/** Summarize a video */
+/** Generate gis of a video */
 app.post("/videos/:videoId/gist", async (request, response, next) => {
   const videoId = request.params.videoId;
   let data = request.body.data;
-  console.log("🚀 > app.post > data=", data)
-
   try {
     const options = {
       method: "POST",
@@ -117,21 +115,6 @@ app.post("/videos/:videoId/gist", async (request, response, next) => {
     const status = error.response?.status || 500;
     const message =
       error.response?.data?.message || "Error Summarizing a Video";
-    return next({ status, message });
-  }
-});
-
-/** Get video information from a YouTube URL using ytdl */
-app.get("/video-info", async (request, response, next) => {
-  try {
-    let url = request.query.url;
-    const videoId = ytdl.getURLVideoID(url);
-    const videoInfo = await ytdl.getBasicInfo(videoId);
-    response.json(videoInfo.videoDetails);
-  } catch (error) {
-    const status = error.response?.status || 500;
-    const message =
-      error.response?.data?.message || "Error getting info of a video";
     return next({ status, message });
   }
 });

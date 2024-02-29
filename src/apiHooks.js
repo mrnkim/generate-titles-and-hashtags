@@ -49,26 +49,7 @@ export function useGetVideo(indexId, videoId, enabled) {
   });
 }
 
-export async function fetchVideoInfo(queryClient, url) {
-  try {
-    const response = await queryClient.fetchQuery({
-      queryKey: [keys.VIDEO, url],
-      queryFn: async () => {
-        const response = await apiConfig.SERVER.get(
-          `/video-info?url=${encodeURIComponent(url)}`
-        );
-        const respData = response.data;
-        return respData;
-      },
-    });
-    return response;
-  } catch (error) {
-    console.error("Error fetching video information:", error);
-    throw error;
-  }
-}
-
-export function useGenerateTtitleTopicHashtag(types, videoId, enabled) {
+export function useGenerateTitleTopicHashtag(types, videoId, enabled) {
   return useQuery({
     queryKey: [keys.VIDEOS, "gist", videoId],
     queryFn: async () => {
@@ -85,42 +66,6 @@ export function useGenerateTtitleTopicHashtag(types, videoId, enabled) {
     enabled: enabled,
   });
 }
-
-// export function useGenerateTitle(data, videoId, enabled) {
-//   return useQuery({
-//     queryKey: [keys.VIDEOS, "title", videoId],
-//     queryFn: async () => {
-//       if (!enabled) {
-//         return null;
-//       }
-
-//       const response = await apiConfig.SERVER.post(`/videos/${videoId}/gist`, {
-//         data,
-//       });
-//       const respData = response.data;
-//       return respData;
-//     },
-//     enabled: enabled,
-//   });
-// }
-
-// export function useGenerateHashtag(data, videoId, enabled) {
-//   return useQuery({
-//     queryKey: [keys.VIDEOS, "hashtag", videoId],
-//     queryFn: async () => {
-//       if (!enabled) {
-//         return null;
-//       }
-
-//       const response = await apiConfig.SERVER.post(`/videos/${videoId}/gist`, {
-//         data,
-//       });
-//       const respData = response.data;
-//       return respData;
-//     },
-//     enabled: enabled,
-//   });
-// }
 
 export function useGetTask(taskId) {
   return useQuery({

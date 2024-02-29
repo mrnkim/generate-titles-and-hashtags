@@ -12,9 +12,9 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import WarningIcon from "./Warning.svg";
 import greenWarningIcon from "./Warning_Green.svg";
 
-/** Summarize a Video App
+/** Generate Titles and Hashtags
  *
- * App -> GenerateTitlesAndHashtags -> {VideoUrlUploadForm, Video, InputForm, Result}
+ * App -> GenerateTitlesAndHashtags -> {VideoFileUploadForm, Video, InputForm, Result}
  *
  */
 
@@ -27,19 +27,11 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
 
   const [field1, field2, field3] = ["topic", "title", "hashtag"];
   const [types, setTypes] = useState(new Set());
-  // const [field1Prompt, setField1Prompt] = useState({ types: null });
-  // const [field2Prompt, setField2Prompt] = useState({ type: null });
-  // const [field3Prompt, setField3Prompt] = useState({ type: null });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
   const [showCheckWarning, setShowCheckWarning] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  console.log("🚀 > GenerateTitlesAndHashtags > selectedFile=", selectedFile);
   const [isFileUploading, setIsFileUploading] = useState(false);
-  console.log(
-    "🚀 > GenerateTitlesAndHashtags > isFileUploading=",
-    isFileUploading
-  );
 
   const queryClient = useQueryClient();
 
@@ -60,18 +52,10 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
     return cleanedFilename;
   }
 
-  async function resetPrompts() {
+  async function resetTypes() {
     setTypes(new Set());
-    // setField1Prompt({
-    //   isChecked: false,
-    // });
-    // setField2Prompt({
-    //   isChecked: false,
-    // });
-    // setField3Prompt({
-    //   isChecked: false,
-    // });
   }
+
   useEffect(() => {
     const fetchData = async () => {
       await queryClient.invalidateQueries({
@@ -79,7 +63,7 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
       });
     };
     fetchData();
-    setTypes(new Set());
+    resetTypes();
     setIsSubmitted(false);
     setShowVideoTitle(false);
     setShowCheckWarning(false);
@@ -95,7 +79,6 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
       <VideoFileUploadForm
         index={index}
         refetchVideos={refetchVideos}
-        resetPrompts={resetPrompts}
         selectedFile={selectedFile}
         setSelectedFile={setSelectedFile}
         isFileUploading={isFileUploading}
@@ -147,12 +130,6 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
           {video && (
             <InputForm
               video={video}
-              // field1Prompt={field1Prompt}
-              // setField1Prompt={setField1Prompt}
-              // field2Prompt={field2Prompt}
-              // setField2Prompt={setField2Prompt}
-              // field3Prompt={field3Prompt}
-              // setField3Prompt={setField3Prompt}
               field1={field1}
               field2={field2}
               field3={field3}
@@ -163,14 +140,7 @@ export function GenerateTitlesAndHashtags({ index, videoId, refetchVideos }) {
             />
           )}
           {video && (
-            <Result
-              video={video}
-              isSubmitted={isSubmitted}
-              types={types}
-              // field1Prompt={field1Prompt}
-              // field2Prompt={field2Prompt}
-              // field3Prompt={field3Prompt}
-            />
+            <Result video={video} isSubmitted={isSubmitted} types={types} />
           )}
         </>
       )}

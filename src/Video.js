@@ -4,9 +4,8 @@ import "./Video.css";
 
 /** Shows a video
  *
- * SummarizeVideo -> Video
- * SummarizeVideo -> {VideoUrlUploadForm} -> Video
- * SummarizeVideo -> {Result} -> Video
+ * GenerateTitlesAndHashtags -> Video
+ * GenerateTitlesAndHashtags -> {VideoFileUploadForm} -> Video
  *
  */
 
