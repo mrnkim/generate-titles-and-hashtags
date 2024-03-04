@@ -4,7 +4,6 @@ const multer = require("multer");
 const app = express();
 const upload = multer();
 const cors = require("cors");
-const ytdl = require("ytdl-core");
 const bodyParser = require("body-parser");
 const axios = require("axios");
 
@@ -97,7 +96,7 @@ app.get(
   }
 );
 
-/** Generate gis of a video */
+/** Generate gist of a video */
 app.post("/videos/:videoId/gist", async (request, response, next) => {
   const videoId = request.params.videoId;
   let data = request.body.data;
@@ -108,7 +107,6 @@ app.post("/videos/:videoId/gist", async (request, response, next) => {
       headers: { ...HEADERS, accept: "application/json" },
       data: { ...data, video_id: videoId },
     };
-    console.log("🚀 > app.post > options=", options)
     const apiResponse = await axios.request(options);
     response.json(apiResponse.data);
   } catch (error) {
