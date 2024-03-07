@@ -16,7 +16,6 @@ const PORT_NUMBER = process.env.REACT_APP_PORT_NUMBER;
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-// app.use(upload.none());
 app.use(
   bodyParser.urlencoded({
     extended: true,
