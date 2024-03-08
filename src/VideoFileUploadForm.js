@@ -33,7 +33,7 @@ export function VideoFileUploadForm({
   };
 
   /** Submit a Youtube video url for indexing  */
-  async function indexYouTubeVideo() {
+  async function indexVideo() {
     try {
       const form = new FormData();
       form.append("language", "en");
@@ -91,7 +91,7 @@ export function VideoFileUploadForm({
         queryKey: [keys.TASK, taskId],
       });
       try {
-        indexYouTubeVideo();
+        indexVideo();
       } catch (error) {
         console.error("Video upload error:", error);
       }
