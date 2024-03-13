@@ -21,13 +21,7 @@ export function Result({ video, isSubmitted, types }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries([
-      keys.VIDEOS,
-      video?._id,
-      "topic",
-      "title",
-      "hashtag",
-    ]);
+    queryClient.invalidateQueries([keys.VIDEOS, video?._id, "gist"]);
   }, [types]);
 
   return (

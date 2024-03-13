@@ -60,13 +60,7 @@ export function InputForm({
     setShowVideoTitle(true);
     setShowCheckWarning(false);
 
-    queryClient.invalidateQueries([
-      keys.VIDEOS,
-      video._id,
-      "topic",
-      "title",
-      "hashtag",
-    ]);
+    queryClient.invalidateQueries([keys.VIDEOS, video._id, "gist"]);
   }
 
   useEffect(() => {
