@@ -21,7 +21,7 @@ export function Task({ taskId, refetchVideos }) {
     if (task && (task.status === "ready" || task.status === "failed")) {
       refetchVideos();
     }
-  }, [task, task.status]);
+  }, [task, task?.status]);
 
   useEffect(() => {
     queryClient.invalidateQueries({
@@ -31,15 +31,19 @@ export function Task({ taskId, refetchVideos }) {
 
   return (
     <div className="task">
-      {task.hls?.video_url && <LoadingSpinner />}
-      {!task.hls?.thumbnail_urls && <LoadingSpinner />}
+      {task && task.hls?.video_url && <LoadingSpinner />}
+      {!task && !task.hls?.thumbnail_urls && <LoadingSpinner />}
       <div className="task__status">
         {task && task.status ? `${task.status}...` : null}
       </div>
       <ErrorBoundary>
-        {task.hls?.video_url && (
+        {task && task.hls?.video_url && (
           <div className="task__video">
-            <Video url={task.hls.video_url} width={"381px"} height={"214px"} />
+            <Video
+              url={task.hls?.video_url}
+              width={"381px"}
+              height={"214px"}
+            />
           </div>
         )}
         <Suspense fallback={<LoadingSpinner />}></Suspense>
