@@ -111,7 +111,7 @@ app.post("/videos/:videoId/gist", async (request, response, next) => {
   } catch (error) {
     const status = error.response?.status || 500;
     const message =
-      error.response?.data?.message || "Error Summarizing a Video";
+      error.response?.data?.message || "Error Generating Gist of a Video";
     return next({ status, message });
   }
 });
