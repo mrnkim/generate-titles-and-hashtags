@@ -15,7 +15,6 @@ You can count on this app to whip up a snazzy topic, a catchy title, and some tr
 - [Twelve Labs API](https://docs.twelvelabs.io/docs)
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 - [React](https://react.dev/)
-- [React Player](https://www.npmjs.com/package/react-player)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

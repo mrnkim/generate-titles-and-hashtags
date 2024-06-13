@@ -120,7 +120,6 @@ export function VideoFileUploadForm({
             data-cy="data-cy-url-input"
             ref={setInputRef}
             onChange={handleFileSelect}
-            placeholder="https://www.youtube.com/"
             type="file"
             accept="video/*"
             name="video_file"
