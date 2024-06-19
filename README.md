@@ -32,18 +32,18 @@ Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate yo
 
 ### Step 2 (Option 1). Start the App on Replit
 
-1. Click the button below and fork the repl
+1. Click the button below
 
-   [![Run on Replit](https://replit.com/badge/github/mrnkim/generate-titles-and-hashtags)](https://replit.com/@twelvelabs/generate-titles-and-hashtags)
+   [![Run on Replit](https://replit.com/badge/github/mrnkim/generate-titles-and-hashtags)](https://replit.com/new/github/mrnkim/generate-titles-and-hashtags)
 
-2. Update Secrets (equivalent to .env)
+2. Add Secrets (equivalent to .env), which is located in the Tools pane
 
    ```
    REACT_APP_API_KEY=<YOUR API KEY>
    REACT_APP_INDEX_ID=<YOUR INDEX ID>
    ```
 
-3. Stop and Run the Repl again
+3. Run the Repl again
 
 ### Step 2 (Option 2). Start the App Locally
 
